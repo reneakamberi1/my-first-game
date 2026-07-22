@@ -98,26 +98,17 @@
       box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.6), 0 0 30px rgba(167, 139, 250, 0.25);
     }
 
-    .char-circle {
-      width: 110px; height: 110px; border-radius: 50%;
-      transition: transform 0.25s ease;
-      position: relative;
+    .char-img {
+      width: 160px; height: auto;
+      border-radius: 1rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
     }
-    .char-circle::after {
-      content: ''; position: absolute; inset: -6px; border-radius: 50%;
-      border: 2px solid transparent;
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    .card:hover .char-img { transform: scale(1.08); }
+    .card.selected .char-img {
+      transform: scale(1.08);
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.7), 0 0 28px rgba(167, 139, 250, 0.35);
     }
-    .card:hover .char-circle { transform: scale(1.08); }
-    .card.selected .char-circle { transform: scale(1.08); }
-    .card.selected .char-circle::after {
-      border-color: rgba(167, 139, 250, 0.7);
-      box-shadow: 0 0 20px rgba(167, 139, 250, 0.35);
-    }
-
-    .c-explorer { background: radial-gradient(circle at 35% 35%, #34d399, #059669); box-shadow: 0 0 30px rgba(52, 211, 153, 0.3), inset 0 -4px 8px rgba(0,0,0,0.25); }
-    .c-scout   { background: radial-gradient(circle at 35% 35%, #fbbf24, #d97706); box-shadow: 0 0 30px rgba(251, 191, 36, 0.3), inset 0 -4px 8px rgba(0,0,0,0.25); }
-    .c-pilot   { background: radial-gradient(circle at 35% 35%, #60a5fa, #2563eb); box-shadow: 0 0 30px rgba(96, 165, 250, 0.3), inset 0 -4px 8px rgba(0,0,0,0.25); }
 
     .card-name {
       font-size: 1.25rem; font-weight: 700; color: #e2e8f0;
@@ -205,6 +196,7 @@
       width: 100vw; height: 100vh;
       padding: 0; gap: 0;
       overflow: hidden;
+      background: url('background.jpg') center/cover no-repeat;
     }
 
     .hud {
@@ -384,17 +376,17 @@
     <h1 class="title">Choose Your Character</h1>
     <div class="grid">
       <div class="card" data-character="explorer" onclick="selectCharacter('explorer')">
-        <div class="char-circle c-explorer"></div>
+        <img class="char-img" src="lucid-origin_A_friendly_space_explorer_character_full_body_dark_flight_suit_with_a_helmet_tuc-0-removebg-preview.png" alt="Explorer">
         <span class="card-name">Explorer</span>
         <span class="card-role">Pathfinder</span>
       </div>
       <div class="card" data-character="scout" onclick="selectCharacter('scout')">
-        <div class="char-circle c-scout"></div>
+        <img class="char-img" src="lucid-origin_A_young_space_scout_character_full_body_lightweight_silver_and_orange_space_suit-0-removebg-preview.png" alt="Scout">
         <span class="card-name">Scout</span>
         <span class="card-role">Tracker</span>
       </div>
       <div class="card" data-character="pilot" onclick="selectCharacter('pilot')">
-        <div class="char-circle c-pilot"></div>
+        <img class="char-img" src="lucid-origin_A_friendly_space_explorer_character_full_body_wearing_a_sleek_astronaut_suit_wit-0-removebg-preview.png" alt="Pilot">
         <span class="card-name">Pilot</span>
         <span class="card-role">Flyer</span>
       </div>
