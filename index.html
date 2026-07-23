@@ -86,6 +86,64 @@
     }
     .btn-leave:hover { background: rgba(248, 113, 113, 0.1); border-color: rgba(248, 113, 113, 0.6); }
 
+    /* ── NPC (Captain Vega) ── */
+    .npc-area {
+      position: absolute;
+      left: 2rem;
+      bottom: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      z-index: 2;
+    }
+
+    .npc-img {
+      width: 120px; height: auto;
+      filter: drop-shadow(0 0 12px rgba(167, 139, 250, 0.2));
+      transition: filter 0.3s ease;
+    }
+
+    .npc-name {
+      font-size: 0.8rem; font-weight: 700;
+      color: #a78bfa; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .speech-bubble {
+      position: absolute;
+      left: 130px; top: 5px;
+      max-width: 250px;
+      background: rgba(12, 12, 30, 0.93);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      border-radius: 0.9rem;
+      padding: 0.7rem 1rem;
+      color: #cbd5e1; font-size: 0.85rem; line-height: 1.4;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
+      white-space: normal;
+      animation: fadeInUp 0.5s ease-out both;
+    }
+    .speech-bubble::before {
+      content: ''; position: absolute;
+      left: -10px; top: 16px;
+      width: 0; height: 0;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-right: 10px solid rgba(167, 139, 250, 0.3);
+    }
+    .speech-bubble::after {
+      content: ''; position: absolute;
+      left: -8px; top: 18px;
+      width: 0; height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 8px solid rgba(12, 12, 30, 0.93);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     /* ── character cards ── */
     .card {
       display: flex; flex-direction: column; align-items: center; gap: 1rem;
@@ -390,6 +448,12 @@
 
   <!-- ═══════════ CHARACTER SELECT ═══════════ -->
   <section class="screen active" id="screen-character">
+    <!-- Captain Vega NPC -->
+    <div class="npc-area">
+      <img class="npc-img" src="lucid-origin_A_veteran_space_pilot_character_full_body_simple_style_clean_line_art_flat_shadi-0-removebg-preview.png" alt="Captain Vega">
+      <span class="npc-name">Captain Vega</span>
+      <div class="speech-bubble" id="vegaSpeech"></div>
+    </div>
     <h1 class="title">Choose Your Character</h1>
     <div class="grid">
       <div class="card" data-character="explorer" onclick="selectCharacter('explorer')">
@@ -510,6 +574,23 @@
       btnMute.classList.toggle('muted', muted);
     }
 
+    // ── NPC Captain Vega dialogue ──
+    const LS_KEY = 'lastGameResult'; // "won" | "lost" | absent
+
+    function updateVegaDialogue() {
+      const result = localStorage.getItem(LS_KEY);
+      const bubble = document.getElementById('vegaSpeech');
+      if (!result) {
+        bubble.textContent = "New around here? Click fast and you will do fine.";
+      } else if (result === 'won') {
+        bubble.textContent = "Back again, champion? Let's see if you can beat your own score.";
+      } else {
+        bubble.textContent = "Do not worry about last time. Everyone has a rough round. Try again.";
+      }
+    }
+
+    updateVegaDialogue(); // set on first load
+
     // ── character select ──
     let selectedCharacter = null, selectedLevel = null;
 
@@ -539,6 +620,7 @@
       selectedLevel = null;
       document.querySelectorAll('#screen-level .planet-card').forEach(c => c.classList.remove('selected'));
       const b = document.getElementById('btnPlay'); b.classList.remove('active'); b.disabled = true;
+      updateVegaDialogue();
       showScreen('screen-character');
     }
 
@@ -670,11 +752,13 @@
       const scoreText = `${score} / 100`;
 
       if (won) {
+        localStorage.setItem(LS_KEY, 'won');
         finalWin.textContent = scoreText;
         btnNext.style.display = parseInt(selectedLevel) < 3 ? '' : 'none';
         overlayWin.classList.add('active');
         spawnConfetti();
       } else {
+        localStorage.setItem(LS_KEY, 'lost');
         finalLose.textContent = scoreText;
         overlayLose.classList.add('active');
       }
